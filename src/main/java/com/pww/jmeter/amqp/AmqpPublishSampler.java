@@ -30,7 +30,9 @@ public class AmqpPublishSampler extends AbstractJavaSamplerClient {
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_EXCHANGE = "exchange";
     private static final String PARAM_ROUTING_KEY = "routing_key";
+    private static final String PARAM_MESSAGE_BODY = "message_body";
     private static final String PARAM_MESSAGE_SIZE_BYTES = "message_size_bytes";
+    private static final String PARAM_CONTENT_TYPE = "content_type";
     private static final String PARAM_PERSISTENT = "persistent";
     private static final String PARAM_TIMEOUT_MS = "connect_timeout_ms";
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -46,7 +48,9 @@ public class AmqpPublishSampler extends AbstractJavaSamplerClient {
         args.addArgument(PARAM_PASSWORD, "");
         args.addArgument(PARAM_EXCHANGE, "");
         args.addArgument(PARAM_ROUTING_KEY, "test.key");
+        args.addArgument(PARAM_MESSAGE_BODY, "");
         args.addArgument(PARAM_MESSAGE_SIZE_BYTES, "256");
+        args.addArgument(PARAM_CONTENT_TYPE, "application/json");
         args.addArgument(PARAM_PERSISTENT, "false");
         args.addArgument(PARAM_TIMEOUT_MS, "5000");
         return args;
@@ -88,10 +92,26 @@ public class AmqpPublishSampler extends AbstractJavaSamplerClient {
 
         String exchange = context.getParameter(PARAM_EXCHANGE);
         String routingKey = context.getParameter(PARAM_ROUTING_KEY);
+        String messageBody = context.getParameter(PARAM_MESSAGE_BODY);
         int messageSize = parseInt(context.getParameter(PARAM_MESSAGE_SIZE_BYTES), 256);
+        String contentType = context.getParameter(PARAM_CONTENT_TYPE);
         boolean persistent = parseBoolean(context.getParameter(PARAM_PERSISTENT), false);
 
-        byte[] payload = buildPayload(messageSize);
+        // Use custom message body if provided, otherwise generate random bytes
+        byte[] payload;
+        if (messageBody != null && !messageBody.isEmpty()) {
+            payload = messageBody.getBytes(StandardCharsets.UTF_8);
+        } else {
+            payload = buildPayload(messageSize);
+        }
+
+        // Default content type based on payload type
+        if (contentType == null || contentType.isEmpty()) {
+            contentType = (messageBody != null && !messageBody.isEmpty())
+                ? "application/json"
+                : "application/octet-stream";
+        }
+
         String correlationId = UUID.randomUUID().toString();
 
         try {
@@ -101,7 +121,7 @@ public class AmqpPublishSampler extends AbstractJavaSamplerClient {
 
             AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                     .correlationId(correlationId)
-                    .contentType("application/octet-stream")
+                    .contentType(contentType)
                     .deliveryMode(persistent ? 2 : 1)
                     .build();
 

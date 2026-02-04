@@ -38,13 +38,15 @@ This plugin provides a high-performance AMQP publisher for JMeter load testing. 
 | `password` | (empty) | RabbitMQ password (optional if in URI) |
 | `exchange` | (empty) | Exchange name (empty = default exchange) |
 | `routing_key` | `test.key` | Routing key for the message |
-| `message_size_bytes` | `256` | Size of the message payload in bytes |
+| `message_body` | (empty) | Custom message payload (e.g., JSON). If empty, random bytes are generated |
+| `message_size_bytes` | `256` | Size of random payload in bytes (only used if message_body is empty) |
+| `content_type` | `application/json` | MIME type of the message |
 | `persistent` | `false` | Whether to mark messages as persistent |
 | `connect_timeout_ms` | `5000` | Connection timeout in milliseconds |
 
 ## Example Configuration
 
-For testing against a local RabbitMQ instance:
+### Basic throughput test (random bytes):
 
 ```
 amqp_uri: amqp://localhost:5672
@@ -55,6 +57,21 @@ routing_key: test.routing.key
 message_size_bytes: 1024
 persistent: false
 ```
+
+### JSON payload test (for Fulcrum/NewRelic):
+
+```
+amqp_uri: amqp://localhost:5672
+username: guest
+password: guest
+exchange: fulcrum
+routing_key: fulcrum.incoming
+message_body: {"logs":[{"timestamp":${__time()},"message":"Test log entry","attributes":{"service":"jmeter-test"}}]}
+content_type: application/json
+persistent: false
+```
+
+**Note:** You can use JMeter functions like `${__time()}`, `${__UUID()}`, and variables in the `message_body` field.
 
 ## Building
 
