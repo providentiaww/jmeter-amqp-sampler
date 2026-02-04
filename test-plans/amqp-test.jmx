@@ -10,9 +10,9 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">100</stringProp>
+          <stringProp name="LoopController.loops">10</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">10</stringProp>
+        <stringProp name="ThreadGroup.num_threads">2</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
@@ -21,7 +21,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="amqp_uri" elementType="Argument">
                 <stringProp name="Argument.name">amqp_uri</stringProp>
-                <stringProp name="Argument.value">amqp://provuser:pr0vUs3r@rabbitmq.prov.svc:5672/phaedo</stringProp>
+                <stringProp name="Argument.value">amqp://guest:guest@localhost:5672</stringProp>
               </elementProp>
               <elementProp name="username" elementType="Argument">
                 <stringProp name="Argument.name">username</stringProp>
@@ -33,11 +33,11 @@
               </elementProp>
               <elementProp name="exchange" elementType="Argument">
                 <stringProp name="Argument.name">exchange</stringProp>
-                <stringProp name="Argument.value">fulcrum.incoming</stringProp>
+                <stringProp name="Argument.value">amq.topic</stringProp>
               </elementProp>
               <elementProp name="routing_key" elementType="Argument">
                 <stringProp name="Argument.name">routing_key</stringProp>
-                <stringProp name="Argument.value">fulcrum.incoming</stringProp>
+                <stringProp name="Argument.value">test.routing.key</stringProp>
               </elementProp>
               <elementProp name="message_body" elementType="Argument">
                 <stringProp name="Argument.name">message_body</stringProp>
