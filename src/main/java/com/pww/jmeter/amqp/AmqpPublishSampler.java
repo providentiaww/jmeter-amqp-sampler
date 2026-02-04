@@ -67,10 +67,10 @@ public class AmqpPublishSampler extends AbstractJavaSamplerClient {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setUri(uri);
 
-            if (username != null && !username.isBlank()) {
+            if (username != null && !username.trim().isEmpty()) {
                 factory.setUsername(username);
             }
-            if (password != null && !password.isBlank()) {
+            if (password != null && !password.trim().isEmpty()) {
                 factory.setPassword(password);
             }
 

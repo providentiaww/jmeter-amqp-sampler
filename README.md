@@ -76,7 +76,7 @@ persistent: false
 ## Building
 
 Requirements:
-- Java 17+
+- Java 8+
 - Maven 3.6+
 
 ```bash
@@ -101,7 +101,7 @@ This design ensures efficient connection reuse during load tests.
 
 - JMeter 5.6.3+
 - RabbitMQ 3.x (AMQP 0-9-1)
-- Java 17+
+- Java 8+
 
 ## License
 

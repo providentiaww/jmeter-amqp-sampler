@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="AMQP Plugin Test" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="AMQP Publishers" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">100</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">10</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="AMQP Publish" enabled="true">
+          <elementProp name="arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="amqp_uri" elementType="Argument">
+                <stringProp name="Argument.name">amqp_uri</stringProp>
+                <stringProp name="Argument.value">amqp://provuser:pr0vUs3r@rabbitmq.prov.svc:5672/phaedo</stringProp>
+              </elementProp>
+              <elementProp name="username" elementType="Argument">
+                <stringProp name="Argument.name">username</stringProp>
+                <stringProp name="Argument.value"></stringProp>
+              </elementProp>
+              <elementProp name="password" elementType="Argument">
+                <stringProp name="Argument.name">password</stringProp>
+                <stringProp name="Argument.value"></stringProp>
+              </elementProp>
+              <elementProp name="exchange" elementType="Argument">
+                <stringProp name="Argument.name">exchange</stringProp>
+                <stringProp name="Argument.value">fulcrum.incoming</stringProp>
+              </elementProp>
+              <elementProp name="routing_key" elementType="Argument">
+                <stringProp name="Argument.name">routing_key</stringProp>
+                <stringProp name="Argument.value">fulcrum.incoming</stringProp>
+              </elementProp>
+              <elementProp name="message_body" elementType="Argument">
+                <stringProp name="Argument.name">message_body</stringProp>
+                <stringProp name="Argument.value">{"logs":[{"timestamp":${__time()},"message":"AMQP plugin test message","attributes":{"service":"jmeter-amqp-test","test_id":"${__UUID()}"}}]}</stringProp>
+              </elementProp>
+              <elementProp name="content_type" elementType="Argument">
+                <stringProp name="Argument.name">content_type</stringProp>
+                <stringProp name="Argument.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="persistent" elementType="Argument">
+                <stringProp name="Argument.name">persistent</stringProp>
+                <stringProp name="Argument.value">false</stringProp>
+              </elementProp>
+              <elementProp name="connect_timeout_ms" elementType="Argument">
+                <stringProp name="Argument.name">connect_timeout_ms</stringProp>
+                <stringProp name="Argument.value">5000</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="classname">com.pww.jmeter.amqp.AmqpPublishSampler</stringProp>
+        </JavaSampler>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
